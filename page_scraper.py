@@ -1,24 +1,20 @@
 import asyncio
-from puppeteer import launch
+import requests
 from bs4 import BeautifulSoup
+from typing import List
+from urllib.parse import urljoin
 
-async def main():
+URL = "https://automatetheboringstuff.com/3e/chapter12.html"
+
+with requests.get(URL) as response:
+    soup = BeautifulSoup(response.content, 'lxml')
+
+
+for section in soup.find_all('section', attrs={'type': 'division'}):
     
-    browser = await launch()
-    page = await browser.newPage()
-    await page.goto('https://example.com')
-    await page.screenshot({'path': 'example.png'})
+    match = soup.find_all('section', attrs={'type': 'division', 'aria-labelledby': 'sec1'})
+    for i in range(len(match)):
+        print (match[i].h3.text)
 
-    dimensions = await page.evaluate('''() => {
-        return {
-            width: document.documentElement.clientWidth,
-            height: document.documentElement.clientHeight,
-            deviceScaleFactor: window.devicePixelRatio
-        }
-    }''')
-    print('Dimensions:', dimensions)
-    
-    await browser.close()
-
-
-asyncio.get_event_loop().run_until_complete(main())
+    summary = match[i].p.text
+    print(summary)
