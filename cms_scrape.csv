@@ -1,0 +1,5 @@
+Headline,Summary,URL
+Low-latency osu! on Linux,"osu! on Linux is nothing new. It has been running fine under Wine for almost a decade already (the first guide on the osu! forums goes back to 2009)! Getting it to work perfectly, to meet my top player needs, is another story though.",https://blog.thepoon.fr/osuLinuxAudioLatency/
+Installing an AUR Package on Arch Linux,"Arch Linux is a very rich distribution. There are plenty of packages in the official repositories that will suit most needs, however sometimes it may lack of something. But most of the time, there’s a solution in the AUR!",https://blog.thepoon.fr/InstallingAURPackage/
+Getting the XP-PEN Star G640 to work on Linux,"Few weeks ago, I noticed I was getting “input jumps” on the tablet I was using, the GAOMON S56K.
+I’ve had been using this tablet since November~December 2016, when GAOMON contacted me to send me a free sample in exchange for a review (no matter the opinion I give, of course!). It was so great that I sticked with it, until issues arose.",https://blog.thepoon.fr/XPPenLinux/
