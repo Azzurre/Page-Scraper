@@ -4,17 +4,30 @@ from bs4 import BeautifulSoup
 from typing import List
 from urllib.parse import urljoin
 
-URL = "https://automatetheboringstuff.com/3e/chapter12.html"
+URL = "https://blog.thepoon.fr"
 
 with requests.get(URL) as response:
     soup = BeautifulSoup(response.content, 'lxml')
 
 
-for section in soup.find_all('section', attrs={'type': 'division'}):
-    
-    match = soup.find_all('section', attrs={'type': 'division', 'aria-labelledby': 'sec1'})
-    for i in range(len(match)):
-        print (match[i].h3.text)
+match = soup.find('div', class_='posts')
+#print(match)
 
-    summary = match[i].p.text
+for article in soup.find_all('article'):
+    headline = article.h2.a.text
+    print(headline)
+    
+    summary = article.find('div', class_='entry').p.text
     print(summary)
+    
+    href = article.h2.a['href']
+    print(urljoin(URL, href))
+    
+    print()
+
+#for headline in match.find_all('h2'):
+#    headline = headline.a.text
+#    print(headline)
+    
+#headline = match.h2.a.text
+#print(headline)
