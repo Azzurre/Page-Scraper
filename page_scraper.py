@@ -20,9 +20,12 @@ for article in soup.find_all('article'):
     summary = article.find('div', class_='entry').p.text
     print(summary)
     
-    href = article.h2.a['href']
-    print(urljoin(URL, href))
-    
+    try:
+        href = article.h2.a['href']
+        print(urljoin(URL, href))
+    except KeyError:
+        print("No href found for article")
+
     print()
 
 #for headline in match.find_all('h2'):
