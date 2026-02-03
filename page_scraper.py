@@ -14,6 +14,22 @@ from selenium.webdriver.chrome.options import Options
 import re
 import random
 from crawl4ai import *
+import cmd
+
+# Command Line Interface for the web scraper (AI powered)
+class myCLI(cmd.Cmd):
+    intro = 'Welcome to the web scraper CLI. Type help or ? to list commands.\n'
+    prompt = '(scraper) '
+
+    def do_scrape(self, url):
+        'Scrape the given URL: scrape http://example.com'
+        asyncio.run(main(url))
+
+    def do_exit(self, arg):
+        'Exit the CLI'
+        print('Exiting...')
+        return True 
+
 
 async def main(url = "http://books.toscrape.com/"):
     async with AsyncWebCrawler() as crawler:
@@ -76,5 +92,5 @@ if __name__ == "__main__":
     # books = asyncio.run(scrape_books("http://books.toscrape.com/"))
     # save_to_csv(books, 'books.csv')
     asyncio.run(main())
-    print(f"Scraped {len(books)} books and saved to books.csv")
+    # print(f"Scraped {len(books)} books and saved to books.csv")
     
