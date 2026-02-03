@@ -49,9 +49,9 @@ async def main(url):
             config=run_config
             )
         if result.success == True:
-            print("Crawling succeeded!")
             print(result.markdown)
-            
+            print("Crawling succeeded!")
+            print(f"Status code: {result.status_code}")       
 
 # async def scrape_books(url):
     
