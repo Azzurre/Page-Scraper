@@ -21,17 +21,21 @@ def scrape_books():
     books = []
     
     for book in soup.select('article.product_pod'):
-        title = book.h3.a['title']
-        price = book.select_one('p.price_color').text.strip()
-        match = re.search(r'[\$€£]', price)
-        if match:
-            currency_symbol = match.group(0)            
-        availability = book.select_one('p.instock.availability').text.strip()
+        # Extract book details
+        title = book.h3.a['title'] # Book title
+        price = book.select_one('p.price_color').text.strip() # Book price
+        currency_symbol = None # Default currency symbol
+        match = re.search(r'[\$€£]', price) # Regex to find currency symbol
+        if match:  
+            currency_symbol = match.group(0)           # Extract currency symbol if found 
+        availability = book.select_one('p.instock.availability').text.strip() # Availability status
+        star_rating = book.find('p', class_='star-rating')['class'][1] # Star rating class
         books.append({
             'title': title,
             'price': price,
             'currency_symbol': currency_symbol if match else None,
-            'availability': availability
+            'availability': availability,
+            'star_rating': star_rating
         })
         
         time.sleep(1)  # Be polite and avoid overwhelming the server
