@@ -1,5 +1,6 @@
 import asyncio
 import time
+from unittest import result
 from wsgiref import headers
 from mdurl import URL
 import requests
@@ -31,7 +32,7 @@ class myCLI(cmd.Cmd):
         return True 
 
 
-async def main(url = "http://books.toscrape.com/"):
+async def main(url):
     async with AsyncWebCrawler() as crawler:
         result = await crawler.arun(url)
         print(result.markdown)
@@ -91,9 +92,7 @@ async def main(url = "http://books.toscrape.com/"):
 if __name__ == "__main__":
     # books = asyncio.run(scrape_books("http://books.toscrape.com/"))
     # save_to_csv(books, 'books.csv')
-    asyncio.run(main())
     cli = myCLI()
     cli.cmdloop()
-    
     # print(f"Scraped {len(books)} books and saved to books.csv")
     
