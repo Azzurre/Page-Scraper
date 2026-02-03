@@ -33,9 +33,17 @@ class myCLI(cmd.Cmd):
 
 
 async def main(url):
-    async with AsyncWebCrawler() as crawler:
-        result = await crawler.arun(url)
-        print(result.markdown)
+    Browser_config = BrowserConfig() # Default
+    run_config = CrawlerRunConfig() # Default
+    
+    async with AsyncWebCrawler(config=Browser_config) as crawler:
+        result = await crawler.arun( # Define the crawling task
+            url,
+            run_config=run_config
+            )
+        if result.success == True:
+            print("Crawling succeeded!")
+            print(result.markdown)
 
 # async def scrape_books(url):
     
