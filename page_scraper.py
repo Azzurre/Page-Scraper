@@ -15,10 +15,10 @@ import re
 import random
 from crawl4ai import *
 
-async def main():
+async def main(url = "http://books.toscrape.com/"):
     async with AsyncWebCrawler() as crawler:
-        result = await crawler.arun("http://books.toscrape.com/")
-        print(result)
+        result = await crawler.arun(url)
+        print(result.markdown)
 
 # async def scrape_books(url):
     
