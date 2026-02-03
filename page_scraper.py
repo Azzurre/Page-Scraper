@@ -34,16 +34,24 @@ class myCLI(cmd.Cmd):
 
 async def main(url):
     Browser_config = BrowserConfig() # Default
-    run_config = CrawlerRunConfig() # Default
+    run_config = CrawlerRunConfig(
+        markdown_generator=DefaultMarkdownGenerator(
+            content_filter=PruningContentFilter(
+                threshold=0.5  # Adjust threshold as needed
+            ),
+            options={"ignore_links": True} # Ignore links in the markdown output 
+        )
+    )# Default
     
     async with AsyncWebCrawler(config=Browser_config) as crawler:
         result = await crawler.arun( # Define the crawling task
             url,
-            run_config=run_config
+            config=run_config
             )
         if result.success == True:
             print("Crawling succeeded!")
             print(result.markdown)
+            
 
 # async def scrape_books(url):
     
