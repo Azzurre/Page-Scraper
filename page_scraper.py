@@ -30,6 +30,18 @@ def scrape_books():
             currency_symbol = match.group(0)           # Extract currency symbol if found 
         availability = book.select_one('p.instock.availability').text.strip() # Availability status
         star_rating = book.find('p', class_='star-rating')['class'][1] # Star rating class
+        star_rating = star_rating.lower()  # Convert to lowercase for consistency
+        if star_rating == 'one':
+            star_rating = '★'
+        elif star_rating == 'two':
+            star_rating = '★★'
+        elif star_rating == 'three':
+            star_rating = '★★★'
+        elif star_rating == 'four':
+            star_rating = '★★★★'
+        elif star_rating == 'five':
+            star_rating = '★★★★★'
+        
         books.append({
             'title': title,
             'price': price,
