@@ -92,5 +92,8 @@ if __name__ == "__main__":
     # books = asyncio.run(scrape_books("http://books.toscrape.com/"))
     # save_to_csv(books, 'books.csv')
     asyncio.run(main())
+    cli = myCLI()
+    cli.cmdloop()
+    
     # print(f"Scraped {len(books)} books and saved to books.csv")
     
