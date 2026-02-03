@@ -46,3 +46,6 @@ def save_to_csv(books: List[dict], filename: str):
 if __name__ == "__main__":
     books = scrape_books()
     save_to_csv(books, 'books.csv')
+    
+    print(f"Scraped {len(books)} books and saved to books.csv")
+    
