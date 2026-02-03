@@ -37,7 +37,7 @@ def scrape_books():
         time.sleep(1)  # Be polite and avoid overwhelming the server
     return books
 def save_to_csv(books: List[dict], filename: str):
-    keys = books[0.].keys()
+    keys = books[0].keys()
     with open(filename, 'w', newline='', encoding='utf-8') as output_file:
         dict_writer = csv.DictWriter(output_file, fieldnames=keys)
         dict_writer.writeheader()
