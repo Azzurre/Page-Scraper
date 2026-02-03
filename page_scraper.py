@@ -42,7 +42,7 @@ def scrape_books():
             'star_rating': star_rating
         })
         
-        time.sleep(1)  # Be polite and avoid overwhelming the server
+        time.sleep(0.5)  # Be polite and avoid overwhelming the server
     return books
 def save_to_csv(books: List[dict], filename: str):
     keys = books[0].keys()
