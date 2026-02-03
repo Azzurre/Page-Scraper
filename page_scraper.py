@@ -1,4 +1,5 @@
 import asyncio
+import time
 from mdurl import URL
 import requests
 from bs4 import BeautifulSoup
@@ -26,9 +27,22 @@ def scrape_books():
         if match:
             currency_symbol = match.group(0)            
         availability = book.select_one('p.instock.availability').text.strip()
-        book.append({
+        books.append({
             'title': title,
             'price': price,
             'currency_symbol': currency_symbol if match else None,
             'availability': availability
         })
+        
+        time.sleep(1)  # Be polite and avoid overwhelming the server
+    return books
+def save_to_csv(books: List[dict], filename: str):
+    keys = books[0.].keys()
+    with open(filename, 'w', newline='', encoding='utf-8') as output_file:
+        dict_writer = csv.DictWriter(output_file, fieldnames=keys)
+        dict_writer.writeheader()
+        dict_writer.writerows(books)
+        
+if __name__ == "__main__":
+    books = scrape_books()
+    save_to_csv(books, 'books.csv')
