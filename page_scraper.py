@@ -15,6 +15,12 @@ from selenium.webdriver.chrome.options import Options
 def main():
     URL = "https://blog.thepoon.fr"
 
+    response = requests.get(URL)
+    
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.content, 'lxml')
+        quotes = soup.find_all('div', class_='post')
+        
     with requests.get(URL) as response:
         soup = BeautifulSoup(response.content, 'lxml')
 
