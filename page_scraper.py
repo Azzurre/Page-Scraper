@@ -9,45 +9,23 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+import re
 
 
-
-def main():
-    URL = "https://blog.thepoon.fr"
-
+def scrape_books():
+    URL = "http://books.toscrape.com/"
     response = requests.get(URL)
+    soup = BeautifulSoup(response.content, 'html.parser')
     
-    if response.status_code == 200:
-        soup = BeautifulSoup(response.content, 'lxml')
-        quotes = soup.find_all('div', class_='post')
-        
-    with requests.get(URL) as response:
-        soup = BeautifulSoup(response.content, 'lxml')
-
-
-    match = soup.find('div', class_='posts')
-    #print(match)
-
-    csv_file = open('cms_scrape.csv', 'w', newline='', encoding='utf-8')
-    writer = csv.writer(csv_file)
-    writer.writerow(['Headline', 'Summary', 'URL'])
-
-    for article in soup.find_all('article'):
-        headline = article.h2.a.text
-        print(headline)
-        
-        summary = article.find('div', class_='entry').p.text
-        print(summary)
-        
-        try:
-            href = article.h2.a['href']
-            print(urljoin(URL, href))
-        except KeyError:
-            print("No href found for article")
-
-        print()
-        
-        writer.writerow([headline, summary, urljoin(URL, href)])
-    csv_file.close()
-if __name__ == "__main__":
-    main()
+    books = []
+    
+    for book in soup.select('article.product_pod'):
+        title = book.h3.a['title']
+        price = book.select_one('p.price_color').text.strip()
+        if price.
+        availability = book.select_one('p.instock.availability').text.strip()
+        book.append({
+            'title': title,
+            'price': price,
+            'availability': availability
+        })
