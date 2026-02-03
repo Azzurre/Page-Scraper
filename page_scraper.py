@@ -13,25 +13,6 @@ from selenium.webdriver.chrome.options import Options
 
 
 def main():
-    options = Options()
-    options.add_argument('--headless=new') # Run Chrome in headless mode
-    driver = webdriver.Chrome(service=Service(), options=options)
-    driver.get("https://blog.thepoon.fr")
-    
-    #Extract page and get screenshot
-    print(driver.title)
-    driver.save_screenshot("screenshot.png")
-    
-    links = driver.find_elements(By.TAG_NAME, "a")
-    for link in links[:5]:
-        text = link.text.strip()
-        href = link.get_attribute("href")
-        print(text)
-        print(href)
-    
-    driver.quit()
-        
-    
     URL = "https://blog.thepoon.fr"
 
     with requests.get(URL) as response:
@@ -62,8 +43,5 @@ def main():
         
         writer.writerow([headline, summary, urljoin(URL, href)])
     csv_file.close()
-
 if __name__ == "__main__":
     main()
-    
-
