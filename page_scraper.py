@@ -1,5 +1,6 @@
 import asyncio
 import time
+from wsgiref import headers
 from mdurl import URL
 import requests
 from bs4 import BeautifulSoup
@@ -11,11 +12,16 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 import re
+import random
 
-
-def scrape_books():
-    URL = "http://books.toscrape.com/"
-    response = requests.get(URL)
+def scrape_books(url):
+    
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+    
+    
+    URL = url
+    response = requests.get(URL, headers=headers)
     soup = BeautifulSoup(response.content, 'html.parser')
     
     books = []
