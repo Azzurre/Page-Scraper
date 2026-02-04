@@ -31,17 +31,12 @@ class myCLI(cmd.Cmd):
         print('Exiting...')
         return True 
 
-
 async def main(url):
     Browser_config = BrowserConfig() # Default
     run_config = CrawlerRunConfig(
-        markdown_generator=DefaultMarkdownGenerator(
-            content_filter=PruningContentFilter(threshold=0.5) , # Prune less relevant content
-            options={"ignore_links": True} # Ignore links in the markdown output 
-        ),
-        word_count_threshold=10,
-        remove_overlay_elements=False,
-        process_iframes=True
+        #Cache Control
+        cache_mode=CacheMode.ENABLED,  # No cache
+        
     )# Default
     
     async with AsyncWebCrawler(config=Browser_config) as crawler:
@@ -49,9 +44,13 @@ async def main(url):
             url,
             config=run_config
             )
+        
         if result.success == True:
-            print(result.markdown)
+            #Print clean content in markdown format
+            print(f"{result.markdown}")
             print("Crawling succeeded!")
+            
+            print(result.success)
             print(f"Status code: {result.status_code}")       
         else:
             print("Crawling failed.")
