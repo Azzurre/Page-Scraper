@@ -36,13 +36,17 @@ async def main(url):
     run_config = CrawlerRunConfig(
         #Cache Control
         cache_mode=CacheMode.ENABLED,  # No cache
+        confidence_threshold = 0.8,
+        max_pages = 10,
         
     )# Default
     
     async with AsyncWebCrawler(config=Browser_config) as crawler:
+        adaptive = AdaptiveCrawler(crawler) # Enable adaptive crawling
         result = await crawler.arun( # Define the crawling task
             url,
-            config=run_config
+            config=run_config,
+            query = "List all of the books along with their prices, availability status, star ratings, and currency symbols in a markdown table format."
             )
         
         if result.success == True:
@@ -51,7 +55,9 @@ async def main(url):
             print("Crawling succeeded!")
             
             print(result.success)
-            print(f"Status code: {result.status_code}")       
+            print(f"Status code: {result.status_code}")
+            
+            adaptive.print_stats() # Print adaptive crawling stats        
         else:
             print("Crawling failed.")
             print(f"Error: {result.error}")
