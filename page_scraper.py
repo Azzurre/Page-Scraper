@@ -2,6 +2,7 @@ import asyncio
 import time
 from unittest import result
 from wsgiref import headers
+from flask import json
 from mdurl import URL
 import requests
 from bs4 import BeautifulSoup
@@ -30,38 +31,65 @@ class myCLI(cmd.Cmd):
         'Exit the CLI'
         print('Exiting...')
         return True 
+    
+def save_to_csv(books: List[dict], filename: str):
+    keys = books[0].keys()
+    with open(filename, 'w', newline='', encoding='utf-8') as output_file:
+        dict_writer = csv.DictWriter(output_file, fieldnames=keys)
+        dict_writer.writeheader()
+        dict_writer.writerows(books)
 
 async def main(url):
-    Browser_config = BrowserConfig() # Default
-    run_config = CrawlerRunConfig(
-        #Cache Control
-        cache_mode=CacheMode.ENABLED,  # No cache
-        confidence_threshold = 0.8,
-        max_pages = 10,
-        
-    )# Default
+    schema = {
+        "name": "Books",
+        "baseSelector": "article.product_pod",
+        "fields": [
+            {
+                "name": "title",
+                "selector": "h3",
+                "type": "text"
+            },
+            {
+                "name": "price",
+                "selector": "p.price_color",
+                "type": "text"
+            },
+            {
+                "name": "availability",
+                "selector": "p.instock.availability",
+                "type": "text"
+            },
+            {
+                "name": "star_rating",
+                "selector": "p",
+                "type": "attribute",
+                "attribute": "class"
+            },
+            {
+                "name": "currency_symbol",
+                "selector": "p.price_color",
+                "type": "text",
+            }
+        ]
+    }
     
-    async with AsyncWebCrawler(config=Browser_config) as crawler:
-        adaptive = AdaptiveCrawler(crawler) # Enable adaptive crawling
-        result = await crawler.arun( # Define the crawling task
-            url,
-            config=run_config,
-            query = "List all of the books along with their prices, availability status, star ratings, and currency symbols in a markdown table format."
+    async with AsyncWebCrawler() as crawler:
+        results = await crawler.arun(
+            url=url,
+            config=CrawlerRunConfig(
+                cache_mode=CacheMode.BYPASS,
+                extraction_strategy=JsonCssExtractionStrategy(schema
             )
+        )
+        )
         
-        if result.success == True:
-            #Print clean content in markdown format
-            print(f"{result.markdown}")
-            print("Crawling succeeded!")
-            
-            print(result.success)
-            print(f"Status code: {result.status_code}")
-            
-            adaptive.print_stats() # Print adaptive crawling stats        
-        else:
-            print("Crawling failed.")
-            print(f"Error: {result.error}")
-            print(f"Status code: {result.status_code}")
+        if results.success:
+            data = json.loads(results.extracted_content)
+            for item in data:                
+                save_to_csv(data, 'books.csv')
+                print(item)
+
+
 
 # async def scrape_books(url):
     
@@ -106,12 +134,7 @@ async def main(url):
 #         print(f"An error occurred: {e}")
 #         return []
     
-# def save_to_csv(books: List[dict], filename: str):
-#     keys = books[0].keys()
-#     with open(filename, 'w', newline='', encoding='utf-8') as output_file:
-#         dict_writer = csv.DictWriter(output_file, fieldnames=keys)
-#         dict_writer.writeheader()
-#         dict_writer.writerows(books)
+
 
 
         
